@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["fullname"]
+    REQUIRED_FIELDS = ["fullname"]  # noqa: RUF012
 
     class Meta:
         verbose_name = "User"

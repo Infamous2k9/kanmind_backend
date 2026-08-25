@@ -21,7 +21,7 @@ def build_auth_response(token, user):
 class RegistrationView(CreateAPIView):
     """Erstellt einen neuen User und liefert direkt ein Auth-Token zurück."""
 
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  # noqa: RUF012
     serializer_class = RegistrationSerializer
 
     def create(self, request, *args, **kwargs):
@@ -37,7 +37,7 @@ class RegistrationView(CreateAPIView):
 class LoginView(APIView):
     """Authentifiziert einen User und liefert ein Auth-Token zurück."""
 
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  # noqa: RUF012
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
