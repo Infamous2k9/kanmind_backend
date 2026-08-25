@@ -94,6 +94,11 @@ class TaskViewSet(
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         instance = self.get_object()
+        if "board" in request.data and int(request.data["board"]) != instance.board_id:
+            return Response(
+                {"board": "Board cannot be changed after creation."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         task = serializer.save()

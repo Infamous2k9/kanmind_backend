@@ -178,7 +178,6 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
             "reviewer_id",
             "due_date",
         ]
-        read_only_fields = ["board"]  # noqa: RUF012
 
     def validate(self, attrs):
         board = self.instance.board if self.instance else attrs.get("board")
