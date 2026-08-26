@@ -6,7 +6,7 @@ from auth_app.models import User
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    """Validiert Registrierungsdaten und legt einen neuen User an."""
+    """Validates registration data and creates a new user."""
 
     repeated_password = serializers.CharField(write_only=True)
 
@@ -32,7 +32,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    """Prüft E-Mail/Passwort und stellt den authentifizierten User bereit."""
+    """Validates email/password and provides the authenticated user."""
 
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
