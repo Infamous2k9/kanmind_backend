@@ -33,8 +33,8 @@ A Django REST Framework backend for a Kanban board application (boards, tasks, a
 2. Create and activate a virtual environment:
 
    ```bash
-   python -m venv env
-   source env/bin/activate   # Windows: env\Scripts\activate
+   python -m venv .venv
+   source .venv/bin/activate   # Windows: env\Scripts\activate
    ```
 
 3. Install dependencies:
