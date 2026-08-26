@@ -64,13 +64,6 @@ A Django REST Framework backend for a Kanban board application (boards, tasks, a
 
 The API will be available at `http://127.0.0.1:8000/api/`.
 
-## Running Tests
-
-```bash
-coverage run --source='.' manage.py test
-coverage report -m
-```
-
 ## Project Structure
 
 ```
