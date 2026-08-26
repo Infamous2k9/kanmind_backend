@@ -2,6 +2,7 @@ from auth_app.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.exceptions import PermissionDenied
@@ -33,8 +34,10 @@ class BoardViewSet(viewsets.ModelViewSet):
     """CRUD for boards with role-dependent serializers and permissions."""
 
     def get_queryset(self):
-        user = self.request.user
-        return Board.objects.filter(Q(owner=user) | Q(members=user)).distinct()
+        if self.action == "list":
+            user = self.request.user
+            return Board.objects.filter(Q(owner=user) | Q(members=user)).distinct()
+        return Board.objects.all()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -98,9 +101,15 @@ class TaskViewSet(
         return [permissions.IsAuthenticated(), IsTaskBoardMember()]
 
     def create(self, request, *args, **kwargs):
+        board_id = request.data.get("board")
+        if not board_id:
+            return Response(
+                {"board": "This field is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        board = self._get_board_or_404(board_id)
+        self._check_board_membership(board)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self._check_board_membership(serializer.validated_data["board"])
         task = serializer.save(created_by=request.user)
         return Response(TaskSerializer(task).data, status=status.HTTP_201_CREATED)
 
@@ -121,6 +130,14 @@ class TaskViewSet(
         user = self.request.user
         if user != board.owner and user not in board.members.all():
             raise PermissionDenied("You are not a member of this board.")
+
+    def _get_board_or_404(self, board_id):
+        """Fetches the board or raises 404 - runs before serializer validation
+        so an unknown board id doesn't get treated as a 400 validation error."""
+        try:
+            return get_object_or_404(Board, pk=board_id)
+        except (ValueError, TypeError):
+            raise Http404
 
 
 class AssignedToMeView(generics.ListAPIView):
