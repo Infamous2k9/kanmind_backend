@@ -1,4 +1,6 @@
 from auth_app.models import User
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, mixins, permissions, status, viewsets
@@ -63,9 +65,20 @@ class EmailCheckView(APIView):
 
     def get(self, request):
         email = request.query_params.get("email")
+        error = self._validate_email_param(email)
+        if error:
+            return Response({"email": error}, status=status.HTTP_400_BAD_REQUEST)
         user = get_object_or_404(User, email=email)
-        serializer = UserShortSerializer(user)
-        return Response(serializer.data)
+        return Response(UserShortSerializer(user).data)
+
+    def _validate_email_param(self, email):
+        if not email:
+            return "This query parameter is required."
+        try:
+            validate_email(email)
+        except ValidationError:
+            return "Invalid email format."
+        return None
 
 
 class TaskViewSet(
