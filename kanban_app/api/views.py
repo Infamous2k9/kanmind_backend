@@ -30,7 +30,7 @@ from .serializers import (
 
 
 class BoardViewSet(viewsets.ModelViewSet):
-    """CRUD für Boards mit rollenabhängigen Serializern und Permissions."""
+    """CRUD for boards with role-dependent serializers and permissions."""
 
     def get_queryset(self):
         user = self.request.user
@@ -61,7 +61,7 @@ class BoardViewSet(viewsets.ModelViewSet):
 
 
 class EmailCheckView(APIView):
-    """Prüft, ob eine E-Mail-Adresse existiert, und liefert den User zurück."""
+    """Checks if an email address exists and returns the user."""
 
     def get(self, request):
         email = request.query_params.get("email")
@@ -87,7 +87,7 @@ class TaskViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    """Erstellen, Ändern, Löschen von Tasks (kein Listing laut Doku)."""
+    """Create, update, delete tasks (no listing according to documentation)."""
 
     queryset = Task.objects.all()
     serializer_class = TaskCreateUpdateSerializer
@@ -124,7 +124,7 @@ class TaskViewSet(
 
 
 class AssignedToMeView(generics.ListAPIView):
-    """Listet Tasks, bei denen der eingeloggte User Assignee ist."""
+    """Lists tasks where the logged-in user is the assignee."""
 
     serializer_class = TaskSerializer
 
@@ -133,7 +133,7 @@ class AssignedToMeView(generics.ListAPIView):
 
 
 class ReviewingView(generics.ListAPIView):
-    """Listet Tasks, bei denen der eingeloggte User Reviewer ist."""
+    """Lists tasks where the logged-in user is the reviewer."""
 
     serializer_class = TaskSerializer
 
@@ -142,7 +142,7 @@ class ReviewingView(generics.ListAPIView):
 
 
 class CommentListCreateView(generics.ListCreateAPIView):
-    """Listet Kommentare einer Task und erstellt neue Kommentare."""
+    """Lists comments for a task and creates new comments."""
 
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsTaskBoardMember]  # noqa: RUF012
@@ -160,7 +160,7 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 
 class CommentDeleteView(generics.DestroyAPIView):
-    """Löscht einen Kommentar – nur der Autor darf das."""
+    """Deletes a comment – only the author is allowed to do so."""
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

@@ -2,21 +2,21 @@ from rest_framework import permissions
 
 
 class IsBoardMember(permissions.BasePermission):
-    """Erlaubt Zugriff nur Mitgliedern oder dem Owner des Boards."""
+    """Grants access only to board members or the board owner."""
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.owner or request.user in obj.members.all()
 
 
 class IsBoardOwner(permissions.BasePermission):
-    """Erlaubt Zugriff nur dem Owner des Boards (z. B. zum Löschen)."""
+    """Grants access only to the board owner (e.g., for deletion)."""
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.owner
 
 
 class IsTaskBoardMember(permissions.BasePermission):
-    """Erlaubt Zugriff nur Mitgliedern/Owner des Boards, zu dem die Task gehört."""
+    """Grants access only to members/owner of the board to which the task belongs."""
 
     def has_object_permission(self, request, view, obj):
         board = obj.board
@@ -24,14 +24,14 @@ class IsTaskBoardMember(permissions.BasePermission):
 
 
 class IsTaskCreatorOrBoardOwner(permissions.BasePermission):
-    """Erlaubt das Löschen einer Task nur dem Ersteller oder dem Board-Owner."""
+    """Grants permission to delete a task only to the creator or the board owner."""
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.created_by or request.user == obj.board.owner
 
 
 class IsCommentAuthor(permissions.BasePermission):
-    """Erlaubt das Löschen eines Kommentars nur dem Autor."""
+    """Grants permission to delete a comment only to the author."""
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.author

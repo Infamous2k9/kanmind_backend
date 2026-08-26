@@ -7,7 +7,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    """Erstellt User und Superuser über die E-Mail statt über username."""
+    """Creates users and superusers using email instead of username."""
 
     def create_user(self, email, fullname, password=None):
         if not email:
@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Custom User, der sich über die E-Mail-Adresse authentifiziert."""
+    """Custom user model authenticated via email address."""
 
     email = models.EmailField(unique=True)
     fullname = models.CharField(max_length=255)

@@ -9,7 +9,7 @@ from .serializers import LoginSerializer, RegistrationSerializer
 
 
 def build_auth_response(token, user):
-    """Baut die einheitliche Token-Response für Login und Registrierung."""
+    """Builds the unified token response for login and registration."""
     return {
         "token": token.key,
         "fullname": user.fullname,
@@ -19,7 +19,7 @@ def build_auth_response(token, user):
 
 
 class RegistrationView(CreateAPIView):
-    """Erstellt einen neuen User und liefert direkt ein Auth-Token zurück."""
+    """Creates a new user and returns an authentication token."""
 
     permission_classes = [AllowAny]  # noqa: RUF012
     serializer_class = RegistrationSerializer
@@ -35,7 +35,7 @@ class RegistrationView(CreateAPIView):
 
 
 class LoginView(APIView):
-    """Authentifiziert einen User und liefert ein Auth-Token zurück."""
+    """Authenticates a user and returns an authentication token."""
 
     permission_classes = [AllowAny]  # noqa: RUF012
 

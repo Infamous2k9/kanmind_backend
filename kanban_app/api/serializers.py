@@ -5,7 +5,7 @@ from kanban_app.models import Board, Comment, Task
 
 
 class UserShortSerializer(serializers.ModelSerializer):
-    """Kompakte User-Darstellung für verschachtelte Responses."""
+    """Compact user representation for nested responses."""
 
     class Meta:
         model = User
@@ -16,7 +16,7 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class BoardListSerializer(serializers.ModelSerializer):
-    """Für GET/POST /boards/ – flache Felder mit berechneten Counts."""
+    """For GET/POST /boards/ - flat fields with computed counts."""
 
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
@@ -49,7 +49,7 @@ class BoardListSerializer(serializers.ModelSerializer):
 
 
 class BoardCreateSerializer(serializers.ModelSerializer):
-    """Für POST /boards/ – nimmt Titel + Mitglieder-IDs entgegen."""
+    """For POST /boards/ – takes title + member IDs."""
 
     members = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), many=True, write_only=True, required=False
@@ -69,7 +69,7 @@ class BoardCreateSerializer(serializers.ModelSerializer):
 
 
 class TaskShortSerializer(serializers.ModelSerializer):
-    """Task-Darstellung innerhalb von Board-Detail (mit verschachtelten Usern)."""
+    """Task representation nested inside the board detail view."""
 
     assignee = UserShortSerializer(read_only=True)
     reviewer = UserShortSerializer(read_only=True)
@@ -94,7 +94,7 @@ class TaskShortSerializer(serializers.ModelSerializer):
 
 
 class BoardDetailSerializer(serializers.ModelSerializer):
-    """Für GET /boards/{id}/ – mit vollen Mitglieds- und Task-Objekten."""
+    """FFor GET /boards/{id}/ – with full member and task objects."""
 
     members = UserShortSerializer(many=True, read_only=True)
     tasks = TaskShortSerializer(many=True, read_only=True)
@@ -105,7 +105,7 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 
 class BoardUpdateSerializer(serializers.ModelSerializer):
-    """Für PATCH /boards/{id}/ – Response mit owner_data/members_data."""
+    """For PATCH /boards/{id}/ - response includes owner_data/members_data."""
 
     members = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), many=True, write_only=True, required=False
@@ -130,7 +130,7 @@ class BoardUpdateSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    """Read-Serializer für Tasks – verschachtelte assignee/reviewer-Objekte."""
+    """Read serializer for tasks - nested assignee/reviewer objects."""
 
     assignee = UserShortSerializer(read_only=True)
     reviewer = UserShortSerializer(read_only=True)
@@ -156,7 +156,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class TaskCreateUpdateSerializer(serializers.ModelSerializer):
-    """Write-Serializer für Tasks – nimmt assignee_id/reviewer_id entgegen."""
+    """Write serializer for tasks - accepts assignee_id/reviewer_id."""
 
     assignee_id = serializers.PrimaryKeyRelatedField(
         source="assignee", queryset=User.objects.all(), required=False, allow_null=True
@@ -198,7 +198,7 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """Comment-Response mit author als reinem Namens-String."""
+    """Comment response with author represented as a plain name string."""
 
     author = serializers.CharField(source="author.fullname", read_only=True)
 

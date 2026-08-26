@@ -3,7 +3,7 @@ from django.db import models
 
 
 class Board(models.Model):
-    """Ein Kanban-Board mit Owner und Mitgliedern."""
+    """A Kanban board with an owner and members."""
 
     title = models.CharField(max_length=255)
     owner = models.ForeignKey(
@@ -23,7 +23,7 @@ class Board(models.Model):
 
 
 class Task(models.Model):
-    """Eine Aufgabe innerhalb eines Boards."""
+    """A task within a Kanban board."""
 
     STATUS_CHOICES = [  # noqa: RUF012
         ("to-do", "To Do"),
@@ -71,7 +71,7 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
-    """Ein Kommentar zu einer Task."""
+    """A comment on a task."""
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(
