@@ -43,13 +43,21 @@ A Django REST Framework backend for a Kanban board application (boards, tasks, a
    pip install -r requirements.txt
    ```
 
-4. Apply migrations:
+4. Set up environment variables:
+
+   ```bash
+   cp .env.template .env
+   ```
+
+   Open `.env` and replace the placeholder `SECRET_KEY` with your own Django secret key (e.g. generate one with `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`). Never commit your `.env` file or reuse the example key in production.
+
+5. Apply migrations:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Create a superuser (for the admin panel):
+6. Create a superuser (for the admin panel):
 
    ```bash
    python manage.py createsuperuser
@@ -57,7 +65,7 @@ A Django REST Framework backend for a Kanban board application (boards, tasks, a
 
    Note: this project uses a custom User model authenticated by email, so you will be asked for `email`, `fullname`, and `password` instead of `username`.
 
-6. Run the development server:
+7. Run the development server:
    ```bash
    python manage.py runserver
    ```
@@ -131,6 +139,7 @@ Each app contains an `api/` folder with `serializers.py`, `views.py`, `urls.py`,
   - valid format, no matching user → `404 Not Found`
   - valid format, matching user → `200 OK` with the user's `id`, `email`, and `fullname`
 - **CORS** is enabled for local frontend development (`django-cors-headers`).
+- **Environment variables**: sensitive settings (currently `SECRET_KEY`) are read from a `.env` file, which is git-ignored. Copy `.env.template` to `.env` and set your own values before running the project — see step 4 in Setup.
 
 ## API Documentation
 
